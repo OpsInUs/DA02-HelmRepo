@@ -1,0 +1,46 @@
+global:
+  namespace: petclinic-dev-review
+  
+services:
+  admin-server:
+    image:
+      tag: latest
+    replicas: 1
+  api-gateway:
+    image:
+      tag: latest
+    replicas: 1
+    ingress:
+      host: petclinic-review.local
+  config-server:
+    image:
+      tag: latest
+    replicas: 1
+  customers-service:
+    image:
+      tag: latest
+    replicas: 1
+  discovery-server:
+    image:
+      tag: latest
+    replicas: 1
+  genai-service:
+    image:
+      tag: latest
+    replicas: 1
+  vets-service:
+    image:
+      tag: latest
+    replicas: 1
+  visits-service:
+    image:
+      tag: latest
+    replicas: 1
+
+resources:
+  limits:
+    cpu: 300m
+    memory: 384Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

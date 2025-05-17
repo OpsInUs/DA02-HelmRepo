@@ -1,0 +1,90 @@
+# Default values for spring-petclinic-microservices
+
+global:
+  namespace: default
+  dockerRegistry: docker.io
+  imageRepository: vuhoabinhthachhoa
+  imagePullPolicy: IfNotPresent
+  
+services:
+  admin-server:
+    name: admin-server
+    image:
+      repository: spring-petclinic-admin-server
+      tag: latest
+    port: 9090
+    replicas: 1
+    
+  api-gateway:
+    name: api-gateway
+    image:
+      repository: spring-petclinic-api-gateway
+      tag: latest
+    port: 8080
+    replicas: 1
+    ingress:
+      enabled: true
+      host: petclinic.local
+      path: /
+      
+  config-server:
+    name: config-server
+    image:
+      repository: spring-petclinic-config-server
+      tag: latest
+    port: 8888
+    replicas: 1
+    
+  customers-service:
+    name: customers-service
+    image:
+      repository: spring-petclinic-customers-service
+      tag: latest
+    port: 8080
+    replicas: 1
+    
+  discovery-server:
+    name: discovery-server
+    image:
+      repository: spring-petclinic-discovery-server
+      tag: latest
+    port: 8761
+    replicas: 1
+    
+  genai-service:
+    name: genai-service
+    image:
+      repository: spring-petclinic-genai-service
+      tag: latest
+    port: 8080
+    replicas: 1
+    env:
+      - name: OPENAI_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: openai-secrets
+            key: api-key
+            
+  vets-service:
+    name: vets-service
+    image:
+      repository: spring-petclinic-vets-service
+      tag: latest
+    port: 8080
+    replicas: 1
+    
+  visits-service:
+    name: visits-service
+    image:
+      repository: spring-petclinic-visits-service
+      tag: latest
+    port: 8080
+    replicas: 1
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

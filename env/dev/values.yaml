@@ -1,0 +1,30 @@
+global:
+  namespace: petclinic-dev
+
+services:
+  admin-server:
+    image:
+      tag: latest
+  api-gateway:
+    image:
+      tag: latest
+    ingress:
+      host: petclinic-dev.local
+  config-server:
+    image:
+      tag: latest
+  customers-service:
+    image:
+      tag: latest
+  discovery-server:
+    image:
+      tag: latest
+  genai-service:
+    image:
+      tag: latest
+  vets-service:
+    image:
+      tag: latest
+  visits-service:
+    image:
+      tag: latest

@@ -28,16 +28,23 @@ spec:
           requests:
             cpu: {{ $.Values.resources.requests.cpu }}
             memory: {{ $.Values.resources.requests.memory }}
-        {{- if hasKey $service "env" }}
         env:
-        {{- range $service.env }}
-        - name: {{ .name }}
-          {{- if hasKey . "value" }}
-          value: {{ .value | quote }}
-          {{- else if hasKey . "valueFrom" }}
-          valueFrom:
-            {{- toYaml .valueFrom | nindent 12 }}
+          # Static variable: always present
+          - name: EUREKA_INSTANCE_HOSTNAME
+            value: {{ $name }}
+
+          # Only include the following if $service.env exists
+          {{- if hasKey $service "env" }}
+          {{- range $service.env }}
+          - name: {{ .name }}
+            {{- if hasKey . "value" }}
+            value: {{ .value | quote }}
+            {{- else if hasKey . "valueFrom" }}
+            valueFrom:
+              {{- toYaml .valueFrom | nindent 12 }}
+            {{- end }}
           {{- end }}
-        {{- end }}
+          {{- end }}
+
         {{- end }}
 {{- end }}

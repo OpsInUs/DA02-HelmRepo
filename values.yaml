@@ -4,7 +4,8 @@ global:
   namespace: default
   dockerRegistry: docker.io
   imageRepository: vuhoabinhthachhoa
-  imagePullPolicy: IfNotPresent
+  imagePullPolicy: Always
+  imageTag: latest
   
 services:
   admin-server:

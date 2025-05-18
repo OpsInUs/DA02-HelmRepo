@@ -35,10 +35,3 @@ services:
     image:
       tag: latest
     replicas: 1
-resources:
-  limits:
-    cpu: 300m
-    memory: 384Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi

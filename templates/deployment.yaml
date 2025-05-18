@@ -15,19 +15,19 @@ spec:
       labels:
         app: {{ $service.name }}
     spec:
+      {{- if ne $service.name "config-server" }}
+      # Wait for config server (except for config-server itself)
+      initContainers:
+      - name: wait-for-config
+        image: busybox:1.28
+        command: ['sh', '-c', 'until nslookup config-server; do echo waiting for config-server; sleep 2; done;']
+      {{- end }}
       containers:
       - name: {{ $service.name }}
         image: {{ $.Values.global.dockerRegistry }}/{{ $.Values.global.imageRepository }}/{{ $service.image.repository }}:{{ $service.image.tag }}
         imagePullPolicy: {{ $.Values.global.imagePullPolicy }}
         ports:
         - containerPort: {{ $service.port }}
-        resources:
-          limits:
-            cpu: {{ $.Values.resources.limits.cpu }}
-            memory: {{ $.Values.resources.limits.memory }}
-          requests:
-            cpu: {{ $.Values.resources.requests.cpu }}
-            memory: {{ $.Values.resources.requests.memory }}
         env:
           # Static variable: always present
           - name: EUREKA_INSTANCE_HOSTNAME
@@ -41,9 +41,8 @@ spec:
             value: {{ .value | quote }}
             {{- else if hasKey . "valueFrom" }}
             valueFrom:
-              {{- toYaml .valueFrom | nindent 12 }}
+              {{- toYaml .valueFrom | nindent 14 }}
             {{- end }}
           {{- end }}
           {{- end }}
-
-        {{- end }}
+{{- end }}

@@ -10,7 +10,7 @@ global:
 # Define anchors for common configuration
 configServerEnv: &configServerEnv
   name: SPRING_CONFIG_IMPORT
-  value: "optional:configserver:http://config-server:8888/"
+  value: "http://config-server:8888/"
 
 
 services:

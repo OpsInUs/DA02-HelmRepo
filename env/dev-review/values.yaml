@@ -1,6 +1,5 @@
 global:
   namespace: petclinic-dev-review
-  
 services:
   admin-server:
     image:
@@ -8,7 +7,7 @@ services:
     replicas: 1
   api-gateway:
     image:
-      tag: latest
+      tag: f956b9d
     replicas: 1
     ingress:
       host: petclinic-review.local
@@ -36,7 +35,6 @@ services:
     image:
       tag: latest
     replicas: 1
-
 resources:
   limits:
     cpu: 300m

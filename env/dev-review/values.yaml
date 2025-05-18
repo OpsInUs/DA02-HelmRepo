@@ -1,5 +1,5 @@
 global:
-  namespace: petclinic-dev-review
+  namespace: dev-review
 services:
   admin-server:
     image:

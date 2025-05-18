@@ -1,5 +1,5 @@
 global:
-  namespace: petclinic-dev
+  namespace: dev
 services:
   admin-server:
     image:

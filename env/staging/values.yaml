@@ -1,5 +1,5 @@
 global:
-  namespace: petclinic-staging
+  namespace: staging
 services:
   admin-server:
     image:

@@ -6,28 +6,15 @@ global:
   imageRepository: vuhoabinhthachhoa
   imagePullPolicy: Always
   imageTag: latest
-  
+
+# Define anchors for common configuration
+configServerEnv: &configServerEnv
+  name: SPRING_CONFIG_IMPORT
+  value: "optional:configserver:http://config-server:8888/"
+
+
 services:
-  admin-server:
-    name: admin-server
-    image:
-      repository: spring-petclinic-admin-server
-      tag: latest
-    port: 9090
-    replicas: 1
-    
-  api-gateway:
-    name: api-gateway
-    image:
-      repository: spring-petclinic-api-gateway
-      tag: latest
-    port: 8080
-    replicas: 1
-    ingress:
-      enabled: true
-      host: petclinic.local
-      path: /
-      
+  # 1. Config server must start first - no dependencies
   config-server:
     name: config-server
     image:
@@ -36,14 +23,7 @@ services:
     port: 8888
     replicas: 1
     
-  customers-service:
-    name: customers-service
-    image:
-      repository: spring-petclinic-customers-service
-      tag: latest
-    port: 8080
-    replicas: 1
-    
+  # 2. Discovery server starts next - depends on config server
   discovery-server:
     name: discovery-server
     image:
@@ -51,6 +31,65 @@ services:
       tag: latest
     port: 8761
     replicas: 1
+    env:
+      - *configServerEnv
+    
+  # 3. Admin server - depends on config and discovery
+  admin-server:
+    name: admin-server
+    image:
+      repository: spring-petclinic-admin-server
+      tag: latest
+    port: 9090
+    replicas: 1
+    env:
+      - *configServerEnv
+    
+  # 4. API Gateway - the entry point for external traffic
+  api-gateway:
+    name: api-gateway
+    image:
+      repository: spring-petclinic-api-gateway
+      tag: latest
+    port: 8080
+    replicas: 1
+    env:
+      - *configServerEnv
+    ingress:
+      enabled: true
+      host: petclinic.local
+      path: /
+      
+  # Business services
+  customers-service:
+    name: customers-service
+    image:
+      repository: spring-petclinic-customers-service
+      tag: latest
+    port: 8080
+    replicas: 1
+    env:
+      - *configServerEnv
+    
+  vets-service:
+    name: vets-service
+    image:
+      repository: spring-petclinic-vets-service
+      tag: latest
+    port: 8080
+    replicas: 1
+    env:
+      - *configServerEnv
+    
+  visits-service:
+    name: visits-service
+    image:
+      repository: spring-petclinic-visits-service
+      tag: latest
+    port: 8080
+    replicas: 1
+    env:
+      - *configServerEnv
     
   genai-service:
     name: genai-service
@@ -60,27 +99,7 @@ services:
     port: 8080
     replicas: 1
     env:
-      - name: OPENAI_API_KEY
-        valueFrom:
-          secretKeyRef:
-            name: openai-secrets
-            key: api-key
-            
-  vets-service:
-    name: vets-service
-    image:
-      repository: spring-petclinic-vets-service
-      tag: latest
-    port: 8080
-    replicas: 1
-    
-  visits-service:
-    name: visits-service
-    image:
-      repository: spring-petclinic-visits-service
-      tag: latest
-    port: 8080
-    replicas: 1
+      - *configServerEnv
 
 resources:
   limits:

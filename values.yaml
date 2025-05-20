@@ -6,25 +6,15 @@ global:
   imagePullPolicy: Always
   imageTag: latest
 
-# Config server environment - reads from git repo
-configServerEnv:
-  - name: SERVER_PORT
-    value: "8888"
-
-# Discovery server minimal bootstrap environment
-discoveryServerEnv:
-  - name: SPRING_CONFIG_IMPORT
-    value: "configserver:http://config-server:8888"
-  - name: SERVER_PORT
-    value: "8761"
-
-# Minimal environment for all other services
-serviceEnv:
+# Common environment configurations as anchors
+common:
+  # Common environment for all services except config-server
+  &commonEnv
   - name: SPRING_CONFIG_IMPORT
     value: "configserver:http://config-server:8888"
 
 services:
-  # 1. Config server must start first - no dependencies
+  # Config server configuration
   config-server:
     name: config-server
     image:
@@ -32,8 +22,11 @@ services:
       tag: latest
     port: 8888
     replicas: 1
+    env:
+      - name: SERVER_PORT
+        value: "8888"
     
-  # 2. Discovery server starts next - depends on config server
+  # Discovery server configuration
   discovery-server:
     name: discovery-server
     image:
@@ -41,17 +34,13 @@ services:
       tag: latest
     port: 8761
     replicas: 1
+    env:
+      # Use common environment anchors and add server-specific variables
+      - *commonEnv
+      - name: SERVER_PORT
+        value: "8761"
     
-  # 3. Admin server - depends on config and discovery
-  admin-server:
-    name: admin-server
-    image:
-      repository: spring-petclinic-admin-server
-      tag: latest
-    port: 9090
-    replicas: 1
-    
-  # 4. API Gateway - the entry point for external traffic
+  # API Gateway configuration
   api-gateway:
     name: api-gateway
     image:
@@ -59,42 +48,40 @@ services:
       tag: latest
     port: 8080
     replicas: 1
+    env: *commonEnv
     ingress:
       enabled: true
       host: petclinic.local
       path: /
       pathType: Prefix
-      ingressClassName: nginx
       
-  # Business services
-  customers-service:
+  # Business services (using anchor for common configuration)
+  customers-service: &businessService
     name: customers-service
     image:
       repository: spring-petclinic-customers-service
       tag: latest
     port: 8080
     replicas: 1
+    env: *commonEnv
     
   vets-service:
+    <<: *businessService
     name: vets-service
     image:
       repository: spring-petclinic-vets-service
       tag: latest
-    port: 8080
-    replicas: 1
     
   visits-service:
+    <<: *businessService
     name: visits-service
     image:
       repository: spring-petclinic-visits-service
       tag: latest
-    port: 8080
-    replicas: 1
     
   genai-service:
+    <<: *businessService
     name: genai-service
     image:
       repository: spring-petclinic-genai-service
       tag: latest
-    port: 8080
-    replicas: 1

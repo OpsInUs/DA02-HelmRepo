@@ -43,17 +43,10 @@ spec:
               fieldRef:
                 fieldPath: metadata.name
           
-          {{- if eq $service.name "config-server" }}
-          {{- with $.Values.configServerEnv }}
-          {{- toYaml . | nindent 10 }}
-          {{- end }}
-          {{- else if eq $service.name "discovery-server" }}
-          {{- with $.Values.discoveryServerEnv }}
-          {{- toYaml . | nindent 10 }}
-          {{- end }}
-          {{- else }}
-          {{- with $.Values.serviceEnv }}
-          {{- toYaml . | nindent 10 }}
+          {{- if $service.env }}
+          {{- range $service.env }}
+          - name: {{ .name }}
+            value: {{ .value | quote }}
           {{- end }}
           {{- end }}
 {{- end }}

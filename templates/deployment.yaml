@@ -56,14 +56,9 @@ spec:
 
           # Only include the following if $service.env exists
           {{- if hasKey $service "env" }}
-          {{- range $service.env }}
-          - name: {{ .name }}
-            {{- if hasKey . "value" }}
-            value: {{ .value | quote }}
-            {{- else if hasKey . "valueFrom" }}
-            valueFrom:
-              {{- toYaml .valueFrom | nindent 14 }}
-            {{- end }}
+          {{- range $index, $env := $service.env }}
+          - name: {{ $env.name }}
+            value: {{ $env.value | quote }}
           {{- end }}
           {{- end }}
 {{- end }}

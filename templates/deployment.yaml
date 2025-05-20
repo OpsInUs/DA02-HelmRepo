@@ -15,12 +15,20 @@ spec:
       labels:
         app: {{ $service.name }}
     spec:
-      {{- if ne $service.name "config-server" }}
-      # Wait for config server (except for config-server itself)
+      {{- if eq $service.name "config-server" }}
+      # Config server doesn't wait for anything
+      {{- else if eq $service.name "discovery-server" }}
+      # Discovery server only waits for config-server
       initContainers:
       - name: wait-for-config
         image: busybox:1.28
         command: ['sh', '-c', 'until nslookup config-server; do echo waiting for config-server; sleep 2; done;']
+      {{- else }}
+      # All other services wait for both config-server and discovery-server
+      initContainers:
+      - name: wait-for-dependencies
+        image: busybox:1.28
+        command: ['sh', '-c', 'until nslookup config-server && nslookup discovery-server; do echo waiting for dependencies; sleep 2; done;']
       {{- end }}
       containers:
       - name: {{ $service.name }}
@@ -28,6 +36,23 @@ spec:
         imagePullPolicy: {{ $.Values.global.imagePullPolicy }}
         ports:
         - containerPort: {{ $service.port }}
+        {{- if eq $service.name "discovery-server" }}
+        # Add health probes for discovery-server
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8761
+          initialDelaySeconds: 45
+          periodSeconds: 15
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8761
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 5
+        {{- end }}
         env:
           # Static variable: always present
           - name: EUREKA_INSTANCE_HOSTNAME
@@ -46,3 +71,5 @@ spec:
           {{- end }}
           {{- end }}
 {{- end }}
+
+

@@ -54,11 +54,14 @@ spec:
           - name: EUREKA_INSTANCE_HOSTNAME
             value: {{ $service.name }}
 
-          # Only include the following if $service.env exists
-          {{- if hasKey $service "env" }}
-          {{- range $index, $env := $service.env }}
-          - name: {{ $env.name }}
-            value: {{ $env.value | quote }}
+          # Include environment variables based on the service type
+          {{- if eq $service.name "discovery-server" }}
+          {{- with $.Values.discoveryServerEnv }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+          {{- else }}
+          {{- with $.Values.serviceEnv }}
+          {{- toYaml . | nindent 10 }}
           {{- end }}
           {{- end }}
 {{- end }}

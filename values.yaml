@@ -101,10 +101,9 @@ services:
     env: *commonEnv
 
   tracing-server:
-    name: tracing-server
-    image:
-      repository: spring-petclinic-tracing-server
-      tag: latest
+    dockerRepository: openzipkin
     port: 9411
-    replicas: 1
-    env: *commonEnv
+    image:
+      name: zipkin
+    env: 
+      - *commonEnv

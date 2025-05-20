@@ -8,9 +8,14 @@ global:
   imageTag: latest
 
 # Define anchors for common configuration
+# Define anchors for common configuration
 configServerEnv: &configServerEnv
-  name: SPRING_CONFIG_IMPORT
-  value: "http://config-server:8888/"
+  - name: SPRING_CONFIG_IMPORT
+    value: "configserver:http://config-server:8888"
+  - name: SPRING_CLOUD_CONFIG_URI
+    value: "http://config-server:8888"
+  - name: SPRING_CLOUD_CONFIG_FAIL_FAST
+    value: "true"
 
 # Discovery server specific environment
 discoveryServerEnv: &discoveryServerEnv

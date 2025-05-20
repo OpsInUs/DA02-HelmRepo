@@ -36,10 +36,15 @@ spec:
         imagePullPolicy: {{ $.Values.global.imagePullPolicy }}
         ports:
         - containerPort: {{ $service.port }}
+        # env:
+        #   # Instance hostname is important in Kubernetes
+        #   - name: EUREKA_INSTANCE_HOSTNAME
+        #     value: {{ $service.name }}
         env:
-          # Instance hostname is important in Kubernetes
           - name: EUREKA_INSTANCE_HOSTNAME
-            value: {{ $service.name }}
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
           
           {{- if $service.env }}
           {{- range $service.env }}

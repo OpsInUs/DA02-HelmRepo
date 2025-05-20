@@ -99,11 +99,3 @@ services:
     port: 9090
     replicas: 1
     env: *commonEnv
-
-  tracing-server:
-    dockerRepository: openzipkin
-    port: 9411
-    image:
-      name: zipkin
-    env: 
-      - *commonEnv

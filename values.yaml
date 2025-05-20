@@ -99,3 +99,12 @@ services:
     port: 9090
     replicas: 1
     env: *commonEnv
+
+  tracing-server:
+    name: tracing-server
+    image:
+      repository: spring-petclinic-tracing-server
+      tag: latest
+    port: 9411
+    replicas: 1
+    env: *commonEnv

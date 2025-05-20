@@ -1,5 +1,7 @@
 # Default values for spring-petclinic-microservices
 
+# Default values for spring-petclinic-microservices
+
 global:
   namespace: default
   dockerRegistry: docker.io
@@ -7,9 +9,8 @@ global:
   imagePullPolicy: Always
   imageTag: latest
 
-# Define anchors for common configuration
-# Define anchors for common configuration
-configServerEnv: &configServerEnv
+# Standard environment variables without YAML anchors
+configServerEnv:
   - name: SPRING_CONFIG_IMPORT
     value: "configserver:http://config-server:8888"
   - name: SPRING_CLOUD_CONFIG_URI
@@ -18,15 +19,25 @@ configServerEnv: &configServerEnv
     value: "true"
 
 # Discovery server specific environment
-discoveryServerEnv: &discoveryServerEnv
-  - *configServerEnv
+discoveryServerEnv:
+  - name: SPRING_CONFIG_IMPORT
+    value: "configserver:http://config-server:8888"
+  - name: SPRING_CLOUD_CONFIG_URI
+    value: "http://config-server:8888"
+  - name: SPRING_CLOUD_CONFIG_FAIL_FAST
+    value: "true"
   - name: SERVER_PORT
     value: "8761"
 
 # Common environment for all services that depend on discovery
-serviceEnv: &serviceEnv
-  - *configServerEnv
-
+serviceEnv:
+  - name: SPRING_CONFIG_IMPORT
+    value: "configserver:http://config-server:8888"
+  - name: SPRING_CLOUD_CONFIG_URI
+    value: "http://config-server:8888"
+  - name: SPRING_CLOUD_CONFIG_FAIL_FAST
+    value: "true"
+    
 services:
   # 1. Config server must start first - no dependencies
   config-server:

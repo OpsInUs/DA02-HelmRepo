@@ -39,9 +39,7 @@ spec:
         env:
           # Instance hostname is important in Kubernetes
           - name: EUREKA_INSTANCE_HOSTNAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
+            value: {{ $name }}
           
           {{- if $service.env }}
           {{- range $service.env }}

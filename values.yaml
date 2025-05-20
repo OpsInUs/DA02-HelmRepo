@@ -12,6 +12,15 @@ configServerEnv: &configServerEnv
   name: SPRING_CONFIG_IMPORT
   value: "http://config-server:8888/"
 
+# Discovery server specific environment
+discoveryServerEnv: &discoveryServerEnv
+  - *configServerEnv
+  - name: SERVER_PORT
+    value: "8761"
+
+# Common environment for all services that depend on discovery
+serviceEnv: &serviceEnv
+  - *configServerEnv
 
 services:
   # 1. Config server must start first - no dependencies
@@ -33,6 +42,8 @@ services:
     replicas: 1
     env:
       - *configServerEnv
+      - name: SERVER_PORT
+        value: "8761"
     
   # 3. Admin server - depends on config and discovery
   admin-server:

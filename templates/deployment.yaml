@@ -37,26 +37,22 @@ spec:
         ports:
         - containerPort: {{ $service.port }}
         {{- if eq $service.name "discovery-server" }}
-        # Add health probes for discovery-server
+        # Simple health probes for discovery-server
         readinessProbe:
-          httpGet:
-            path: /actuator/health
+          tcpSocket:
             port: 8761
           initialDelaySeconds: 45
           periodSeconds: 15
-          timeoutSeconds: 5
         livenessProbe:
-          httpGet:
-            path: /actuator/health
+          tcpSocket:
             port: 8761
           initialDelaySeconds: 60
           periodSeconds: 30
-          timeoutSeconds: 5
         {{- end }}
         env:
           # Static variable: always present
           - name: EUREKA_INSTANCE_HOSTNAME
-            value: {{ $name }}
+            value: {{ $service.name }}
 
           # Only include the following if $service.env exists
           {{- if hasKey $service "env" }}
@@ -71,5 +67,3 @@ spec:
           {{- end }}
           {{- end }}
 {{- end }}
-
-

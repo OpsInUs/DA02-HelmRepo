@@ -7,11 +7,6 @@ global:
   imagePullPolicy: Always
   imageTag: latest
 
-# Standard environment variables with YAML anchor
-configServerEnv: &configServerEnv
-  name: SPRING_CONFIG_IMPORT
-  value: "configserver:http://config-server:8888"
-
 # Discovery server specific environment
 discoveryServerEnv:
   - name: SPRING_CONFIG_IMPORT
@@ -50,15 +45,6 @@ services:
       tag: latest
     port: 8761
     replicas: 1
-    env:
-      - name: SPRING_CONFIG_IMPORT
-        value: "configserver:http://config-server:8888"
-      - name: SPRING_CLOUD_CONFIG_URI
-        value: "http://config-server:8888"
-      - name: SPRING_CLOUD_CONFIG_FAIL_FAST
-        value: "true"
-      - name: SERVER_PORT
-        value: "8761"
     
   # 3. Admin server - depends on config and discovery
   admin-server:
@@ -68,13 +54,6 @@ services:
       tag: latest
     port: 9090
     replicas: 1
-    env:
-      - name: SPRING_CONFIG_IMPORT
-        value: "configserver:http://config-server:8888"
-      - name: SPRING_CLOUD_CONFIG_URI
-        value: "http://config-server:8888"
-      - name: SPRING_CLOUD_CONFIG_FAIL_FAST
-        value: "true"
     
   # 4. API Gateway - the entry point for external traffic
   api-gateway:
@@ -84,13 +63,6 @@ services:
       tag: latest
     port: 8080
     replicas: 1
-    env:
-      - name: SPRING_CONFIG_IMPORT
-        value: "configserver:http://config-server:8888"
-      - name: SPRING_CLOUD_CONFIG_URI
-        value: "http://config-server:8888"
-      - name: SPRING_CLOUD_CONFIG_FAIL_FAST
-        value: "true"
     ingress:
       enabled: true
       host: petclinic.local
@@ -104,13 +76,6 @@ services:
       tag: latest
     port: 8080
     replicas: 1
-    env:
-      - name: SPRING_CONFIG_IMPORT
-        value: "configserver:http://config-server:8888"
-      - name: SPRING_CLOUD_CONFIG_URI
-        value: "http://config-server:8888"
-      - name: SPRING_CLOUD_CONFIG_FAIL_FAST
-        value: "true"
     
   vets-service:
     name: vets-service
@@ -119,13 +84,6 @@ services:
       tag: latest
     port: 8080
     replicas: 1
-    env:
-      - name: SPRING_CONFIG_IMPORT
-        value: "configserver:http://config-server:8888"
-      - name: SPRING_CLOUD_CONFIG_URI
-        value: "http://config-server:8888"
-      - name: SPRING_CLOUD_CONFIG_FAIL_FAST
-        value: "true"
     
   visits-service:
     name: visits-service
@@ -134,13 +92,6 @@ services:
       tag: latest
     port: 8080
     replicas: 1
-    env:
-      - name: SPRING_CONFIG_IMPORT
-        value: "configserver:http://config-server:8888"
-      - name: SPRING_CLOUD_CONFIG_URI
-        value: "http://config-server:8888"
-      - name: SPRING_CLOUD_CONFIG_FAIL_FAST
-        value: "true"
     
   genai-service:
     name: genai-service
@@ -149,10 +100,3 @@ services:
       tag: latest
     port: 8080
     replicas: 1
-    env:
-      - name: SPRING_CONFIG_IMPORT
-        value: "configserver:http://config-server:8888"
-      - name: SPRING_CLOUD_CONFIG_URI
-        value: "http://config-server:8888"
-      - name: SPRING_CLOUD_CONFIG_FAIL_FAST
-        value: "true"

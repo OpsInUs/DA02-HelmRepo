@@ -37,16 +37,16 @@ spec:
         ports:
         - containerPort: {{ $service.port }}
         {{- if eq $service.name "discovery-server" }}
-        # Simple health probes for discovery-server
+        # Add health check for discovery-server
         readinessProbe:
           tcpSocket:
             port: 8761
-          initialDelaySeconds: 45
+          initialDelaySeconds: 60
           periodSeconds: 15
         livenessProbe:
           tcpSocket:
             port: 8761
-          initialDelaySeconds: 60
+          initialDelaySeconds: 90
           periodSeconds: 30
         {{- end }}
         env:
@@ -59,7 +59,7 @@ spec:
           {{- with $.Values.discoveryServerEnv }}
           {{- toYaml . | nindent 10 }}
           {{- end }}
-          {{- else }}
+          {{- else if ne $service.name "config-server" }}
           {{- with $.Values.serviceEnv }}
           {{- toYaml . | nindent 10 }}
           {{- end }}

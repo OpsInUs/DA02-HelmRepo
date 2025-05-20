@@ -1,5 +1,4 @@
-# Default values for spring-petclinic-microservices
-
+# Values for spring-petclinic-microservices
 global:
   namespace: default
   dockerRegistry: docker.io
@@ -7,26 +6,23 @@ global:
   imagePullPolicy: Always
   imageTag: latest
 
-# Discovery server specific environment
+# Config server environment - reads from git repo
+configServerEnv:
+  - name: SERVER_PORT
+    value: "8888"
+
+# Discovery server minimal bootstrap environment
 discoveryServerEnv:
   - name: SPRING_CONFIG_IMPORT
     value: "configserver:http://config-server:8888"
-  - name: SPRING_CLOUD_CONFIG_URI
-    value: "http://config-server:8888"
-  - name: SPRING_CLOUD_CONFIG_FAIL_FAST
-    value: "true"
   - name: SERVER_PORT
     value: "8761"
 
-# Common environment for all services that depend on discovery
+# Minimal environment for all other services
 serviceEnv:
   - name: SPRING_CONFIG_IMPORT
     value: "configserver:http://config-server:8888"
-  - name: SPRING_CLOUD_CONFIG_URI
-    value: "http://config-server:8888"
-  - name: SPRING_CLOUD_CONFIG_FAIL_FAST
-    value: "true"
-    
+
 services:
   # 1. Config server must start first - no dependencies
   config-server:
@@ -67,6 +63,8 @@ services:
       enabled: true
       host: petclinic.local
       path: /
+      pathType: Prefix
+      ingressClassName: nginx
       
   # Business services
   customers-service:

@@ -36,30 +36,22 @@ spec:
         imagePullPolicy: {{ $.Values.global.imagePullPolicy }}
         ports:
         - containerPort: {{ $service.port }}
-        {{- if eq $service.name "discovery-server" }}
-        # Add health check for discovery-server
-        readinessProbe:
-          tcpSocket:
-            port: 8761
-          initialDelaySeconds: 60
-          periodSeconds: 15
-        livenessProbe:
-          tcpSocket:
-            port: 8761
-          initialDelaySeconds: 90
-          periodSeconds: 30
-        {{- end }}
         env:
-          # Static variable: always present
+          # Instance hostname is important in Kubernetes
           - name: EUREKA_INSTANCE_HOSTNAME
-            value: {{ $service.name }}
-
-          # Include environment variables based on the service type
-          {{- if eq $service.name "discovery-server" }}
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          
+          {{- if eq $service.name "config-server" }}
+          {{- with $.Values.configServerEnv }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+          {{- else if eq $service.name "discovery-server" }}
           {{- with $.Values.discoveryServerEnv }}
           {{- toYaml . | nindent 10 }}
           {{- end }}
-          {{- else if ne $service.name "config-server" }}
+          {{- else }}
           {{- with $.Values.serviceEnv }}
           {{- toYaml . | nindent 10 }}
           {{- end }}

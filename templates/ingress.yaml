@@ -1,4 +1,3 @@
----
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -6,14 +5,15 @@ metadata:
   namespace: {{ $.Values.global.namespace }}
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    # Change the rewrite rule to preserve path information
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
     # Main Application (API Gateway)
     - host: {{ $.Values.global.namespace }}-{{ $.Values.global.baseDomain | default "petclinic.local" }}
       http:
         paths:
-          - path: /
+          - path: /(.*)  # Change this to capture the path
             pathType: Prefix
             backend:
               service:
@@ -25,7 +25,7 @@ spec:
     - host: admin.{{ $.Values.global.namespace }}-{{ $.Values.global.baseDomain | default "petclinic.local" }}
       http:
         paths:
-          - path: /
+          - path: /(.*)  # Change this to capture the path
             pathType: Prefix
             backend:
               service:
@@ -37,7 +37,7 @@ spec:
     - host: eureka.{{ $.Values.global.namespace }}-{{ $.Values.global.baseDomain | default "petclinic.local" }}
       http:
         paths:
-          - path: /
+          - path: /(.*)  # Change this to capture the path
             pathType: Prefix
             backend:
               service:

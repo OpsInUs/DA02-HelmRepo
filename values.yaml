@@ -17,7 +17,7 @@ global:
 # Common environment configurations as anchor
 common: &commonEnv
   - name: SPRING_CONFIG_IMPORT
-    value: "configserver:http://config-server:8888"
+    value: "http://config-server:8888"
 
 services:
   # Config server configuration

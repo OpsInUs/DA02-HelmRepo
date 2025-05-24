@@ -18,7 +18,6 @@ spec:
       containers:
       - name: {{ $service.name }}
         image: {{ $.Values.global.dockerRegistry }}/{{ $service.owner | default $.Values.global.imageRepository }}/{{ $service.image.repository }}:{{ $service.image.tag }}
-        {{- end }}
         imagePullPolicy: {{ $.Values.global.imagePullPolicy }}
         ports:
         - containerPort: {{ $service.port }}

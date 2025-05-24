@@ -54,7 +54,8 @@ services:
       tag: latest
     port: 8080
     replicas: 1
-    env: *commonEnv
+    env: 
+      - *commonEnv
       
   # Business services (explicit configuration without merges)
   customers-service:
@@ -64,7 +65,8 @@ services:
       tag: latest
     port: 8081
     replicas: 1
-    env: *commonEnv
+    env: 
+      - *commonEnv
     
   vets-service:
     name: vets-service
@@ -73,7 +75,8 @@ services:
       tag: latest
     port: 8083
     replicas: 1
-    env: *commonEnv
+    env: 
+      - *commonEnv
     
   visits-service:
     name: visits-service
@@ -82,7 +85,8 @@ services:
       tag: latest
     port: 8082
     replicas: 1
-    env: *commonEnv
+    env: 
+      - *commonEnv
     
   genai-service:
     name: genai-service
@@ -91,7 +95,8 @@ services:
       tag: latest
     port: 8084
     replicas: 1
-    env: *commonEnv
+    env: 
+      - *commonEnv
 
   # Admin server
   admin-server:
@@ -101,4 +106,16 @@ services:
       tag: latest
     port: 9090
     replicas: 1
-    env: *commonEnv
+    env: 
+      - *commonEnv
+
+  tracing-server:
+    name: tracing-server
+    owner: openzipkin
+    image:
+      repository: zipkin
+      tag: latest
+    port: 9411
+    replicas: 1
+    env:
+      - *commonEnv

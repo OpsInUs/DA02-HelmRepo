@@ -17,18 +17,20 @@ spec:
     spec:
       containers:
       - name: {{ $service.name }}
-        image: {{ $.Values.global.dockerRegistry }}/{{ $.Values.global.imageRepository }}/{{ $service.image.repository }}:{{ $service.image.tag }}
+        image: {{ $.Values.global.dockerRegistry }}/{{ $service.owner | default $.Values.global.imageRepository }}/{{ $service.image.repository }}:{{ $service.image.tag }}
+        {{- end }}
         imagePullPolicy: {{ $.Values.global.imagePullPolicy }}
         ports:
         - containerPort: {{ $service.port }}
         env:  
           - name: EUREKA_INSTANCE_HOSTNAME
             value: {{ $service.name }}
-          
-          {{- if $service.env }}
-          {{- range $service.env }}
-          - name: {{ .name }}
-            value: {{ .value | quote }}
-          {{- end }}
-          {{- end }}
+          {{- toYaml $service.env | nindent 12 }}
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
 {{- end }}

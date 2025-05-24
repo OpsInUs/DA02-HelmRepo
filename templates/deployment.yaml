@@ -15,21 +15,6 @@ spec:
       labels:
         app: {{ $service.name }}
     spec:
-      {{- if eq $service.name "config-server" }}
-      # Config server doesn't wait for anything
-      {{- else if eq $service.name "discovery-server" }}
-      # Discovery server only waits for config-server
-      initContainers:
-      - name: wait-for-config
-        image: busybox:1.28
-        command: ['sh', '-c', 'until nslookup config-server; do echo waiting for config-server; sleep 2; done;']
-      {{- else }}
-      # All other services wait for both config-server and discovery-server
-      initContainers:
-      - name: wait-for-dependencies
-        image: busybox:1.28
-        command: ['sh', '-c', 'until nslookup config-server && nslookup discovery-server; do echo waiting for dependencies; sleep 2; done;']
-      {{- end }}
       containers:
       - name: {{ $service.name }}
         image: {{ $.Values.global.dockerRegistry }}/{{ $.Values.global.imageRepository }}/{{ $service.image.repository }}:{{ $service.image.tag }}
@@ -39,20 +24,6 @@ spec:
         env:  
           - name: EUREKA_INSTANCE_HOSTNAME
             value: {{ $service.name }}
-          
-          {{- if ne $service.name "config-server" }}
-          # Fix localhost:8888 fallback issue
-          - name: SPRING_CONFIG_IMPORT
-            value: "optional:configserver:http://config-server:8888"
-          - name: SPRING_CLOUD_CONFIG_URI
-            value: "http://config-server:8888"
-          - name: SPRING_CLOUD_CONFIG_ENABLED
-            value: "true"
-          - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-            value: "http://discovery-server:8761/eureka/"
-          - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS 
-            value: "true"
-          {{- end }}
           
           {{- if $service.env }}
           {{- range $service.env }}

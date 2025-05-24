@@ -24,7 +24,12 @@ spec:
         env:  
           - name: EUREKA_INSTANCE_HOSTNAME
             value: {{ $service.name }}
-          {{- toYaml $service.env | nindent 12 }}
+          {{- if $service.env }}
+          {{- range $service.env }}
+          - name: {{ .name }}
+            value: {{ .value | quote }}
+          {{- end }}
+          {{- end }}
         resources:
           requests:
             memory: "256Mi"

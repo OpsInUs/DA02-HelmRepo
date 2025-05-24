@@ -44,3 +44,15 @@ spec:
                 name: discovery-server
                 port:
                   number: 8761
+    
+    # Config Server Dashboard
+    - host: config.{{ $.Values.global.namespace }}-{{ $.Values.global.baseDomain | default "petclinic.local" }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: config-server
+                port:
+                  number: 8888

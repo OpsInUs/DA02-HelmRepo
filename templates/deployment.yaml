@@ -33,6 +33,8 @@ spec:
         ports:
         - containerPort: {{ $service.port }}
         env:
+          - name: EUREKA_INSTANCE_HOSTNAME
+            value: {{ $service.name }}
         {{- range $service.env }}
           - name: {{ .name }}
             value: {{ .value | quote }}

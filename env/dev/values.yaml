@@ -1,5 +1,6 @@
 global:
   namespace: dev
+  baseDomain: petclinic.local
 services:
   admin-server:
     image:
@@ -7,8 +8,6 @@ services:
   api-gateway:
     image:
       tag: latest
-    ingress:
-      host: petclinic-dev.local
   config-server:
     image:
       tag: latest

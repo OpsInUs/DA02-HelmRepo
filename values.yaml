@@ -1,10 +1,19 @@
 # Values for spring-petclinic-microservices
+# global:
+#   namespace: default
+#   dockerRegistry: docker.io
+#   imageRepository: vuhoabinhthachhoa
+#   imagePullPolicy: Always
+#   imageTag: latest
+
 global:
-  namespace: default
+  namespace: default  # Will be overridden per environment (dev, staging, prod)
   dockerRegistry: docker.io
   imageRepository: vuhoabinhthachhoa
   imagePullPolicy: Always
   imageTag: latest
+  baseDomain: petclinic.local  # Base domain for all environments
+  ingressClass: nginx  # Or "gce" for GKE
 
 # Common environment configurations as anchor
 common: &commonEnv

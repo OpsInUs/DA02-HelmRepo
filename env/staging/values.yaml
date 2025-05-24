@@ -1,5 +1,6 @@
 global:
   namespace: staging
+  baseDomain: petclinic.local
 services:
   admin-server:
     image:

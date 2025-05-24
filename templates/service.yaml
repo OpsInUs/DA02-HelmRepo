@@ -11,5 +11,5 @@ spec:
   ports:
   - port: {{ $service.port }}
     targetPort: {{ $service.port }}
-  type: ClusterIP
+  type: {{ $service.serviceType | default "ClusterIP" }}
 {{- end }}

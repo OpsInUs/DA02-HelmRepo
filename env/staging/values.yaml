@@ -10,8 +10,6 @@ services:
     image:
       tag: v1.0.4
     replicas: 1
-    ingress:
-      host: petclinic-staging.local
   config-server:
     image:
       tag: v1.0.4

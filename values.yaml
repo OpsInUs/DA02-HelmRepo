@@ -13,7 +13,6 @@ global:
   imagePullPolicy: Always
   imageTag: latest
   baseDomain: petclinic.local  # Base domain for all environments
-  ingressClass: nginx  # Or "gce" for GKE
 
 # Common environment configurations as anchor
 common: &commonEnv
@@ -56,11 +55,6 @@ services:
     port: 8080
     replicas: 1
     env: *commonEnv
-    ingress:
-      enabled: true
-      host: petclinic.local
-      path: /
-      pathType: Prefix
       
   # Business services (explicit configuration without merges)
   customers-service:

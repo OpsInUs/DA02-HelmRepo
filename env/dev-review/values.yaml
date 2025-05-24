@@ -7,7 +7,7 @@ services:
     replicas: 1
   api-gateway:
     image:
-      tag: f956b9d
+      tag: 4cdae24
     replicas: 1
     ingress:
       host: petclinic-review.local
@@ -29,9 +29,9 @@ services:
     replicas: 1
   vets-service:
     image:
-      tag: latest
+      tag: 4cdae24
     replicas: 1
   visits-service:
     image:
-      tag: latest
+      tag: 4cdae24
     replicas: 1

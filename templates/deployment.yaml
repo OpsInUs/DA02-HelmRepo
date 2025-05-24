@@ -40,6 +40,20 @@ spec:
           - name: EUREKA_INSTANCE_HOSTNAME
             value: {{ $service.name }}
           
+          {{- if ne $service.name "config-server" }}
+          # Fix localhost:8888 fallback issue
+          - name: SPRING_CONFIG_IMPORT
+            value: "optional:configserver:http://config-server:8888"
+          - name: SPRING_CLOUD_CONFIG_URI
+            value: "http://config-server:8888"
+          - name: SPRING_CLOUD_CONFIG_ENABLED
+            value: "true"
+          - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+            value: "http://discovery-server:8761/eureka/"
+          - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS 
+            value: "true"
+          {{- end }}
+          
           {{- if $service.env }}
           {{- range $service.env }}
           - name: {{ .name }}

@@ -13,7 +13,7 @@ global:
   imagePullPolicy: Always
   imageTag: latest
   baseDomain: petclinic.local  # Base domain for all environments
-  ingressClass: gce  # Or "gce" for GKE
+  ingressClass: nginx  # Or "gce" for GKE
 
 # Common environment configurations as anchor
 common: &commonEnv

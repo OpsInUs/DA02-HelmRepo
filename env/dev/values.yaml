@@ -23,6 +23,9 @@ services:
   visits-service:
     image:
       tag: latest
-  genai-service:
-    image:
-      tag: latest
+  # genai-service:
+  #   image:
+  #     tag: latest
+  # tracing-server:
+  #   image:
+  #     tag: latest

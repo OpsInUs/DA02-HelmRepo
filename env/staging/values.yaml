@@ -22,10 +22,6 @@ services:
     image:
       tag: v1.0.4
     replicas: 1
-  # genai-service:
-  #   image:
-  #     tag: v1.0.4
-  #   replicas: 1
   vets-service:
     image:
       tag: v1.0.4

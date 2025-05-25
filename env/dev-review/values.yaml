@@ -23,10 +23,6 @@ services:
     image:
       tag: latest
     replicas: 1
-  genai-service:
-    image:
-      tag: latest
-    replicas: 1
   vets-service:
     image:
       tag: 4cdae24

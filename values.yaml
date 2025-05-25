@@ -76,15 +76,6 @@ services:
     replicas: 1
     env: *commonEnv
     
-  # genai-service:
-  #   name: genai-service
-  #   image:
-  #     repository: spring-petclinic-genai-service
-  #     tag: latest
-  #   port: 8084
-  #   replicas: 1
-  #   env: *commonEnv
-
   # Admin server
   admin-server:
     name: admin-server
@@ -95,12 +86,12 @@ services:
     replicas: 1
     env: *commonEnv
 
-  # tracing-server:
-  #   name: tracing-server
-  #   owner: openzipkin
-  #   image:
-  #     repository: zipkin
-  #     tag: latest
-  #   port: 9411
-  #   replicas: 1
-  #   env: *commonEnv
+  tracing-server:
+    name: tracing-server
+    owner: openzipkin
+    image:
+      repository: zipkin
+      tag: latest
+    port: 9411
+    replicas: 1
+    env: *commonEnv

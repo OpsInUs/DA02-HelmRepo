@@ -16,15 +16,17 @@ spec:
         app: {{ $service.name }}
     spec:
       initContainers:
-      {{- if ne $service.name "config-server" }}
+      {{- if and (ne $service.name "config-server") (ne $service.name "discovery-server") }}
       - name: wait-for-config-server
         image: busybox:1.28
-        command: ['sh', '-c', 'until nc -z config-server 8888; do echo "Waiting for config-server..."; sleep 3; done;']
-      {{- end }}
-      {{- if ne $service.name "discovery-server" }}
+        command: ['sh', '-c', 'for i in {1..20}; do if nc -z config-server 8888; then echo "Config server ready"; exit 0; fi; echo "Waiting for config-server..."; sleep 3; done; echo "Timeout waiting for config-server"; exit 1;']
       - name: wait-for-discovery-server
         image: busybox:1.28
-        command: ['sh', '-c', 'until nc -z discovery-server 8761; do echo "Waiting for discovery-server..."; sleep 3; done;']
+        command: ['sh', '-c', 'for i in {1..20}; do if nc -z discovery-server 8761; then echo "Discovery server ready"; exit 0; fi; echo "Waiting for discovery-server..."; sleep 3; done; echo "Timeout waiting for discovery-server"; exit 1;']
+      {{- else if eq $service.name "discovery-server" }}
+      - name: wait-for-config-server
+        image: busybox:1.28
+        command: ['sh', '-c', 'for i in {1..20}; do if nc -z config-server 8888; then echo "Config server ready"; exit 0; fi; echo "Waiting for config-server..."; sleep 3; done; echo "Timeout waiting for config-server"; exit 1;']
       {{- end }}
       containers:
       - name: {{ $service.name }}

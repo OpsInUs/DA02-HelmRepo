@@ -17,9 +17,9 @@ services:
   discovery-server:
     image:
       tag: latest
-  genai-service:
-    image:
-      tag: latest
+  # genai-service:
+  #   image:
+  #     tag: latest
   vets-service:
     image:
       tag: latest

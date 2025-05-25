@@ -29,7 +29,3 @@ services:
   # tracing-server:
   #   image:
   #     tag: latest
-
-  genai-service:
-    image:
-      tag: latest

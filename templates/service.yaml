@@ -5,6 +5,11 @@ kind: Service
 metadata:
   name: {{ $service.name }}
   namespace: {{ $.Values.global.namespace }}
+  
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/path: '/actuator/prometheus'
+    prometheus.io/port: '{{ $service.port }}'
 spec:
   selector:
     app: {{ $service.name }}

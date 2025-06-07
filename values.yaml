@@ -10,6 +10,10 @@ global:
 common: &commonEnv
   - name: SPRING_CONFIG_IMPORT
     value: "configserver:http://config-server:8888"
+  - name: SPRING_ZIPKIN_BASE_URL
+    value: "http://zipkin.monitoring.svc.cluster.local:9411"
+  - name: SPRING_SLEUTH_SAMPLER_PROBABILITY
+    value: "1.0"
 
 services:
   # Config server configuration
@@ -92,15 +96,5 @@ services:
   #     repository: spring-petclinic-genai-service
   #     tag: latest
   #   port: 8084
-  #   replicas: 1
-  #   env: *commonEnv
-
-  # tracing-server:
-  #   name: tracing-server
-  #   owner: openzipkin
-  #   image:
-  #     repository: zipkin
-  #     tag: latest
-  #   port: 9411
   #   replicas: 1
   #   env: *commonEnv

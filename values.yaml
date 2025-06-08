@@ -12,8 +12,8 @@ common: &commonEnv
     value: "configserver:http://config-server:8888"
   - name: SPRING_ZIPKIN_BASE_URL
     value: "http://zipkin.monitoring.svc.cluster.local:9411"
-  - name: SPRING_SLEUTH_SAMPLER_PROBABILITY
-    value: "1.0"
+  - name: MANAGEMENT_OTEL_TRACING_EXPORTER
+    value: "zipkin"
 
 services:
   # Config server configuration

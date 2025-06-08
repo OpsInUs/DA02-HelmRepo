@@ -6,6 +6,9 @@ metadata:
   name: {{ $service.name }}
   namespace: {{ $.Values.global.namespace }}
   
+  labels:
+    app: {{ $service.name }}
+    monitoring: enabled
   annotations:
     prometheus.io/scrape: 'true'
     prometheus.io/path: '/actuator/prometheus'
@@ -14,7 +17,8 @@ spec:
   selector:
     app: {{ $service.name }}
   ports:
-  - port: {{ $service.port }}
+  - name: http
+    port: {{ $service.port }}
     targetPort: {{ $service.port }}
   type: {{ $service.serviceType | default "ClusterIP" }}
 {{- end }}

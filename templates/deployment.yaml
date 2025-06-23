@@ -37,6 +37,8 @@ spec:
         env:
           - name: EUREKA_INSTANCE_HOSTNAME
             value: {{ $service.name }}
+          - name: SPRING_APPLICATION_NAME
+            value: {{ $service.name }}
         {{- range $service.env }}
           - name: {{ .name }}
             value: {{ .value | quote }}

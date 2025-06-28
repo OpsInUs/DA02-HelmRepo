@@ -4,35 +4,38 @@ global:
 services:
   admin-server:
     image:
-      tag: v1.0.4
+      tag: v2.0.1
     replicas: 1
   api-gateway:
     image:
-      tag: v1.0.4
+      tag: v2.0.1
     replicas: 1
   config-server:
     image:
-      tag: v1.0.4
+      tag: v2.0.1
     replicas: 1
   customers-service:
     image:
-      tag: v1.0.4
+      tag: v2.0.1
     replicas: 1
   discovery-server:
     image:
-      tag: v1.0.4
+      tag: v2.0.1
     replicas: 1
   vets-service:
     image:
-      tag: v1.0.4
+      tag: v2.0.1
     replicas: 1
   visits-service:
     image:
-      tag: v1.0.4
+      tag: v2.0.1
     replicas: 1
-  # genai-service:
-  #   image:
-  #     tag: v1.0.4
-  # tracing-server:
-  #   image:
-  #     tag: v1.0.4
+    # genai-service:
+    #   image:
+    #     tag: v1.0.4
+    # tracing-server:
+    #   image:
+    #     tag: v1.0.4
+  genai-service:
+    image:
+      tag: v2.0.1

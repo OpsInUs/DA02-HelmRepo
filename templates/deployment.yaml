@@ -30,7 +30,7 @@ spec:
       {{- end }}
       containers:
       - name: {{ $service.name }}
-        image: {{ $service.image.repository }}:{{ $service.image.tag }}
+        image: {{ $.Values.global.imageRepository }}/{{ $service.image.repository }}:{{ $service.image.tag }}
         imagePullPolicy: {{ $.Values.global.imagePullPolicy }}
         ports:
         - containerPort: {{ $service.port }}

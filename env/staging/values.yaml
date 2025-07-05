@@ -30,12 +30,6 @@ services:
     image:
       tag: v2.0.1
     replicas: 1
-    # genai-service:
-    #   image:
-    #     tag: v1.0.4
-    # tracing-server:
-    #   image:
-    #     tag: v1.0.4
   genai-service:
     image:
       tag: v2.0.1

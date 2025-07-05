@@ -31,3 +31,7 @@ services:
     image:
       tag: 4cdae24
     replicas: 1
+  genai-service:
+    image:
+      tag: latest
+    replicas: 1
